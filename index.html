@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feliz 2026, Meu Amor!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Great+Vibes&display=swap');
+
+        body {
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* --- Estilo do Cronômetro --- */
+        #countdown-container {
+            text-align: center;
+            z-index: 10;
+        }
+
+        h1.waiting-title {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3rem;
+            color: #ff9a9e;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 154, 158, 0.5);
+        }
+
+        .timer-box {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .time-unit {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 15px;
+            min-width: 80px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .number {
+            font-size: 2.5rem;
+            font-weight: 600;
+            display: block;
+            color: #fff;
+        }
+
+        .label {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #ccc;
+        }
+
+        /* --- Estilo do Conteúdo (Carta) --- */
+        #content-container {
+            display: none; /* Escondido até dar a hora */
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+            width: 90%;
+            height: 90vh; /* Ocupa altura quase total */
+            overflow-y: auto; /* Permite rolar o texto se for longo */
+            margin: 20px;
+        }
+
+        /* Esconde a barra de rolagem mas permite rolar */
+        #content-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        #content-container::-webkit-scrollbar-thumb {
+            background-color: rgba(255,255,255,0.3);
+            border-radius: 4px;
+        }
+
+        .love-letter {
+            background: rgba(20, 20, 30, 0.85);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.2);
+            text-align: center;
+            animation: fadeIn 2s ease;
+        }
+
+        .love-letter h2 {
+            font-family: 'Great Vibes', cursive;
+            font-size: 3.5rem;
+            background: linear-gradient(to right, #ff9a9e, #fecfef);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        .love-letter p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+            text-align: justify; /* Texto justificado fica mais elegante */
+        }
+        
+        .love-letter p:last-child {
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.3rem;
+            color: #ff9a9e;
+            margin-top: 40px;
+        }
+
+        /* --- Canvas dos Fogos --- */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsividade para celular */
+        @media (max-width: 600px) {
+            .timer-box { gap: 10px; }
+            .time-unit { padding: 10px; min-width: 50px; }
+            .number { font-size: 1.5rem; }
+            .love-letter { padding: 20px; }
+            .love-letter h2 { font-size: 2.5rem; }
+            .love-letter p { font-size: 1rem; text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="fireworks"></canvas>
+
+    <div id="countdown-container">
+        <h1 class="waiting-title">Esperando por 2026...</h1>
+        <div class="timer-box">
+            <div class="time-unit"><span class="number" id="days">00</span><span class="label">Dias</span></div>
+            <div class="time-unit"><span class="number" id="hours">00</span><span class="label">Horas</span></div>
+            <div class="time-unit"><span class="number" id="minutes">00</span><span class="label">Min</span></div>
+            <div class="time-unit"><span class="number" id="seconds">00</span><span class="label">Seg</span></div>
+        </div>
+    </div>
+
+    <div id="content-container">
+        <div class="love-letter">
+            <h2>Feliz 2026 Amor! 🎆</h2>
+            
+            <p>Oiiee meu amor 😭😭🥹🥹❤️❤️❤️ FELIZ 2026!!! 🎆🎆🎆🎆🎆<br>
+            Eu sei que você está lendo isso já em 2026 porque o site abriu 00:00 do dia 1 de janeiro então é isso kakakakka Espero que esse ano seja muito bom 🥹</p>
+
+            <p>Enfim amor, o que eu queria te dizer é Muito obrigado por estar na minha vida até aqui 😭 eu te conheci um pouquinho em 2024, mas a gente ficou muito muito mais próximos em 2025, mais especificamente em março, e aí a gente começou a namorar e estamos até hoje juntos 🥹 Meu amor, muito obrigado por ter feito meu 2025 melhor, com certeza esse ano seria um ano muito triste mas você alegrou ele e me deixou muito feliz 😭🥹❤️❤️🎆🎆🎆 EU TE AMO MUITO MUITO</p>
+
+            <p>Em 2025 nós desejamos quase todos os dias nos abraçar, nos beijar, dormir juntos, etc etc etc... Mas esse ano a gente não pôde se ver e fazer isso tudo 🥺 Mas esse novo ano, 2026, eu vou ir pra aí meu amor, ou você vem pra cá 😭 Eu vou juntar dinheiro e pagar a minha passagem pro Rio, e em 2026 vamos nos abraçar, nos beijar, fazer coisas.. sair e muito mais ❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️ Amor, e se por algum motivo a gente não conseguir esse ano, temos o próximo, na verdade temos a vida toda 😉</p>
+
+            <p>Eu te amo muito meu amor, eu quero sempre estar contigo PRA SEMPRE ❤️❤️ você é meu namorado e meu futuro marido 💍🥹 eu quero me casar com você, você é a minha vida ❤️❤️❤️❤️❤️</p>
+
+            <p>Obrigado por tudo amor, que esse ano seja o melhor ano de todos os tempos! 🎆🎆🥰🥰</p>
+
+            <p>Adeus 2025,<br>FELIZ 2026!!! 🎆🎆🥰🥰❤️❤️❤️🥹🥹🥹💍💍💍🤍🤍🤍🤍🤍</p>
+        </div>
+    </div>
+
+    <script>
+        // --- CONFIGURAÇÃO DA DATA ---
+        // Ano, Mês (0 = Janeiro), Dia, Hora, Minuto, Segundo
+        const targetDate = new Date(2026, 0, 1, 0, 0, 0).getTime(); 
+
+        const countdownContainer = document.getElementById('countdown-container');
+        const contentContainer = document.getElementById('content-container');
+        let fireworksActive = false;
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                // CHEGOU A HORA!
+                clearInterval(interval);
+                countdownContainer.style.display = "none";
+                contentContainer.style.display = "block";
+                if (!fireworksActive) {
+                    startFireworks();
+                    fireworksActive = true;
+                }
+                return;
+            }
+
+            // Calculo do tempo
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }
+
+        const interval = setInterval(updateCountdown, 1000);
+        updateCountdown(); // Roda imediatamente para não esperar 1s
+
+        // --- SISTEMA DE FOGOS DE ARTIFÍCIO (SIMPLES) ---
+        const canvas = document.getElementById("fireworks");
+        const ctx = canvas.getContext("2d");
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particles = [];
+
+        function startFireworks() {
+            loop();
+        }
+
+        function createFirework(x, y) {
+            const particleCount = 100;
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle(x, y));
+            }
+        }
+
+        class Particle {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+                this.speed = Math.random() * 5 + 1;
+                this.angle = Math.random() * Math.PI * 2;
+                this.vx = Math.cos(this.angle) * this.speed;
+                this.vy = Math.sin(this.angle) * this.speed;
+                this.alpha = 1;
+                this.color = `hsl(${Math.random() * 360}, 100%, 50%)`;
+                this.decay = Math.random() * 0.015 + 0.005;
+            }
+            update() {
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vy += 0.05; // Gravidade
+                this.alpha -= this.decay;
+            }
+            draw() {
+                ctx.save();
+                ctx.globalAlpha = this.alpha;
+                ctx.fillStyle = this.color;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        function loop() {
+            requestAnimationFrame(loop);
+            ctx.fillStyle = "rgba(0, 0, 0, 0.1)"; // Rastro
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Criar fogos aleatórios
+            if (Math.random() < 0.05) {
+                createFirework(Math.random() * canvas.width, Math.random() * canvas.height / 2);
+            }
+
+            particles.forEach((particle, index) => {
+                particle.update();
+                particle.draw();
+                if (particle.alpha <= 0) particles.splice(index, 1);
+            });
+        }
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+  </html>
+  
